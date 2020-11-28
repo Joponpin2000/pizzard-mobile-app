@@ -11,7 +11,7 @@ class Response {
 }
 
 class Products {
-  List<FoodModel> foods = [];
+  List<dynamic> foods = [];
 
   Products({this.foods});
 

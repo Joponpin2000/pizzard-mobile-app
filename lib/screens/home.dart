@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pizzard/models/food.dart';
-import 'package:pizzard/models/response.dart';
 import 'package:pizzard/services/foods.dart';
+import 'package:pizzard/widgets/food_list.dart';
+import 'package:pizzard/widgets/food_tile.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -9,7 +9,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<dynamic> foods = List<FoodModel>();
+  List<dynamic> foods;
   bool _loading = true;
   @override
   void initState() {
@@ -20,11 +20,11 @@ class _HomeScreenState extends State<HomeScreen> {
   getFoods() async {
     Foods foodClass = Foods();
     await foodClass.getFoodsFromServer();
-    foods = Products().foods;
+
     setState(() {
       _loading = false;
+      foods = foodClass.foods;
     });
-    print(foods);
   }
 
   @override
@@ -52,6 +52,15 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+      body: _loading
+          ? Center(
+              child: Container(
+                child: CircularProgressIndicator(),
+              ),
+            )
+          : FoodList(
+                foods: foods,
+              ),
     );
   }
 }
