@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pizzard/services/foods.dart';
+import 'package:pizzard/widgets/drawer.dart';
 import 'package:pizzard/widgets/food_list.dart';
-import 'package:pizzard/widgets/food_tile.dart';
 
 class HomeScreen extends StatefulWidget {
+  final bool darkThemeEnabled;
+  HomeScreen(this.darkThemeEnabled);
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -30,7 +32,15 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: MyDrawerWidget(
+        darkThemeEnabled: widget.darkThemeEnabled,
+      ),
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Colors.black,
+        ),
+        elevation: 0,
         title: Text('Pizzards'),
         actions: <Widget>[
           IconButton(
@@ -58,9 +68,38 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: CircularProgressIndicator(),
               ),
             )
-          : FoodList(
-                foods: foods,
+          : SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.symmetric(
+                      horizontal: 15,
+                      vertical: 5,
+                    ),
+                    child: Text(
+                      "Popular",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.symmetric(
+                      horizontal: 15,
+                      vertical: 5,
+                    ),
+                    child: FoodList(
+                      foods: foods,
+                      darkThemeEnabled: widget.darkThemeEnabled,
+                    ),
+                  ),
+                ],
               ),
+            ),
     );
   }
 }

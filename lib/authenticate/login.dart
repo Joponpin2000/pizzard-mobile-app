@@ -5,8 +5,9 @@ import 'package:pizzard/shared/helper_functions.dart';
 
 class LoginScreen extends StatefulWidget {
   final Function toggleView;
+  final bool darkThemeEnabled;
 
-  LoginScreen({this.toggleView});
+  LoginScreen({this.toggleView, this.darkThemeEnabled});
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -35,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => HomeScreen(),
+                builder: (context) => HomeScreen(widget.darkThemeEnabled),
               ),
             );
           } else {

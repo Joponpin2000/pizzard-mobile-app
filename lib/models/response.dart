@@ -1,5 +1,3 @@
-import 'package:pizzard/models/food.dart';
-
 class Response {
   String token;
 

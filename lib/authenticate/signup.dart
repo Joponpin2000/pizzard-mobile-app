@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class SignUpScreen extends StatefulWidget {
   final Function toggleView;
+  final bool darkThemeEnabled;
 
-  SignUpScreen({this.toggleView});
+  SignUpScreen({this.toggleView, this.darkThemeEnabled});
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
 }
