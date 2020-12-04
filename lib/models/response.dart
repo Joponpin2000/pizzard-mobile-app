@@ -7,13 +7,3 @@ class Response {
     return Response(token: json['token']);
   }
 }
-
-class Products {
-  List<dynamic> foods = [];
-
-  Products({this.foods});
-
-  factory Products.fromJson(dynamic json) {
-    return Products(foods: json['products']);
-  }
-}

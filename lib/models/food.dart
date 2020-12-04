@@ -1,5 +1,5 @@
 class FoodModel {
-  int id;
+  String id;
   String productName;
   String productDesc;
   String productCategory;

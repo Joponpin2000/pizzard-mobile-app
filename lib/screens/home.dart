@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pizzard/screens/Cart.dart';
 import 'package:pizzard/services/foods.dart';
 import 'package:pizzard/widgets/drawer.dart';
 import 'package:pizzard/widgets/food_list.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   final bool darkThemeEnabled;
@@ -16,21 +18,23 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    getFoods();
+    // getFoods();
   }
 
-  getFoods() async {
-    Foods foodClass = Foods();
-    await foodClass.getFoodsFromServer();
-
-    setState(() {
-      _loading = false;
-      foods = foodClass.foods;
-    });
+  getFoods(items) async {
+    if (items != null && items != []) {
+      setState(() {
+        _loading = false;
+        foods = items;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final productData = Provider.of<Foods>(context);
+
+    productData.getFoodsFromServer().then((value) => getFoods(value));
     return Scaffold(
       drawer: MyDrawerWidget(
         darkThemeEnabled: widget.darkThemeEnabled,
@@ -52,14 +56,21 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: null,
           ),
           IconButton(
-            icon: Icon(
-              Icons.shopping_cart,
-              size: 30,
-              color: Colors.black,
-            ),
-            onPressed: null,
-            // () => of(context).pushNamed(CartScreen.routeName),
-          ),
+              icon: Icon(
+                Icons.shopping_cart,
+                size: 30,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CartScreen(
+                        darkThemeEnabled: widget.darkThemeEnabled,
+                        ),
+                  ),
+                );
+              }),
         ],
       ),
       body: _loading

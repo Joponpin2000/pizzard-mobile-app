@@ -22,7 +22,6 @@ class FoodTile extends StatelessWidget {
       @required this.productPrice,
       @required this.productQty,
       @required this.darkThemeEnabled});
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -30,7 +29,10 @@ class FoodTile extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => FoodItemScreen(darkThemeEnabled),
+            builder: (context) => FoodItemScreen(
+              darkThemeEnabled: darkThemeEnabled,
+              loadedId: id,
+            ),
           ),
         );
       },
@@ -40,15 +42,28 @@ class FoodTile extends StatelessWidget {
         children: [
           Expanded(
             child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  image: NetworkImage(
-                    "$SERVER_IP/$productImage",
+              width: MediaQuery.of(context).size.width,
+              child: Hero(
+                tag: productImage,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image(
+                    image: NetworkImage(
+                      "$SERVER_IP/$productImage",
+                    ),
+                    fit: BoxFit.cover,
                   ),
-                  fit: BoxFit.cover,
                 ),
               ),
+              // decoration: BoxDecoration(
+              //   borderRadius: BorderRadius.circular(10),
+              //   image: DecorationImage(
+              //     image: NetworkImage(
+              //       "$SERVER_IP/$productImage",
+              //     ),
+              //     fit: BoxFit.cover,
+              //   ),
+              // ),
             ),
           ),
           SizedBox(height: 12),
@@ -71,33 +86,3 @@ class FoodTile extends StatelessWidget {
     );
   }
 }
-
-// child: GridTile(
-//   child: Image.network(
-//     "$SERVER_IP/$productImage",
-//     width: 300,
-//   ),
-//   footer: GridTileBar(
-//     title: Text(productName),
-//     trailing: IconButton(
-//       icon: Icon(Icons.shopping_cart),
-//       onPressed: () {
-// Scaffold.of(context).showSnackBar(
-//   SnackBar(
-//     content: Text(
-//       'Item added to cart.',
-//     ),
-//     duration: Duration(seconds: 3),
-//   ),
-// );
-// cart.addItem(pdt.id, pdt.name, pdt.price);
-//   },
-// ),
-// backgroundColor: Colors.black87,
-//             );
-//           );
-//         ),
-//       ),
-//     );
-//   }
-// }

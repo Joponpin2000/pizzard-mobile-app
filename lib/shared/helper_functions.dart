@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-// const SERVER_IP = 'http://192.168.43.77:4000';
-const SERVER_IP = 'http://192.168.43.201:4000';
+const SERVER_IP = 'http://192.168.43.77:4000';
+// const SERVER_IP = 'http://192.168.43.201:4000';
 
 Map<String, dynamic> parseJwt(String token) {
   final parts = token.split('.');
@@ -48,18 +48,7 @@ bool validateJwt(payload) {
 
 class HelperFunctions {
   static String sharedPreferenceUserLoggedInKey = "ISLOGGEDIN";
-  static String sharedPreferenceUserNameKey = "USERNAMEKEY";
-  static String sharedPreferenceUserEmailKey = "USEREMAILKEY";
   static String sharedPreferenceJwtKey = "jwt";
-
-  // Save data to shared preference
-
-  static Future<bool> saveUserLoggedInSharedPreference(
-      bool isUserLoggedIn) async {
-    SharedPreferences prefs =
-        SharedPreferences.getInstance() as SharedPreferences;
-    return await prefs.setBool(sharedPreferenceUserLoggedInKey, isUserLoggedIn);
-  }
 
   static Future<bool> saveJwtSharedPreference(String jwt) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -71,38 +60,4 @@ class HelperFunctions {
     String value = prefs.getString(sharedPreferenceJwtKey);
     return value;
   }
-
-  // static Future<bool> saveUserNameSharedPreference(String userName) async {
-  //   SharedPreferences prefs =
-  //       SharedPreferences.getInstance() as SharedPreferences;
-  //   return await prefs.setString(sharedPreferenceUserNameKey, userName);
-  // }
-
-  // static Future<bool> saveUserEmailSharedPreference(String userEmail) async {
-  //   SharedPreferences prefs =
-  //       SharedPreferences.getInstance() as SharedPreferences;
-  //   return await prefs.setString(sharedPreferenceUserEmailKey, userEmail);
-  // }
-
-  // // Get data from shared preference
-
-  // static Future<bool> getUserLoggedInSharedPreference() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   return prefs.getBool(sharedPreferenceUserLoggedInKey);
-  // }
-
-  // static Future<String> getJwtSharedPreference() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   return prefs.getString("jwt");
-  // }
-
-  // static Future<String> getUserNameSharedPreference() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   return prefs.getString(sharedPreferenceUserNameKey);
-  // }
-
-  // static Future<String> getUserEmailSharedPreference() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   return prefs.getString(sharedPreferenceUserEmailKey);
-  // }
 }

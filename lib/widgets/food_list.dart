@@ -17,7 +17,8 @@ class FoodList extends StatelessWidget {
         return Container(
           height: MediaQuery.of(context).size.height / 2,
           margin: EdgeInsets.symmetric(vertical: 5),
-          child: FoodTile(
+          child: FoodTile(darkThemeEnabled: darkThemeEnabled,
+          
             id: foods[index]['_id'],
             productCategory: foods[index]['productCategory'],
             productName: foods[index]['productName'],
