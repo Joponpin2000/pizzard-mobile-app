@@ -14,21 +14,29 @@ class CheckOutButton extends StatefulWidget {
 class _CheckOutButtonState extends State<CheckOutButton> {
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      child: Text(
-        'Checkout',
-        style: TextStyle(
-          color: Colors.blue,
-          fontSize: 20,
+    return SizedBox(
+      height: MediaQuery.of(context).size.width * 0.2,
+      width: MediaQuery.of(context).size.width,
+      child: FittedBox(
+        child: FlatButton(
+          color: Colors.orangeAccent,
+          child: Text(
+            'Checkout',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+            ),
+          ),
+          onPressed: widget.cart.totalAmount <= 0
+              ? null
+              : () async {
+                  await Provider.of<Orders>(context, listen: false).addOrder(
+                      widget.cart.items.values.toList(),
+                      widget.cart.totalAmount);
+                  widget.cart.clear();
+                },
         ),
       ),
-      onPressed: widget.cart.totalAmount <= 0
-          ? null
-          : () async {
-              await Provider.of<Orders>(context, listen: false).addOrder(
-                  widget.cart.items.values.toList(), widget.cart.totalAmount);
-              widget.cart.clear();
-            },
     );
   }
 }

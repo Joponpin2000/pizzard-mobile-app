@@ -34,52 +34,57 @@ class FoodTile extends StatelessWidget {
           ),
         );
       },
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              child: Hero(
-                tag: productImage,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image(
-                    image: NetworkImage(
-                      "$SERVER_IP/$productImage",
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.blueGrey[100],
+          ),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                child: Hero(
+                  tag: productImage,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image(
+                      image: NetworkImage(
+                        "$SERVER_IP/$productImage",
+                      ),
+                      fit: BoxFit.cover,
                     ),
-                    fit: BoxFit.cover,
                   ),
                 ),
               ),
-              // decoration: BoxDecoration(
-              //   borderRadius: BorderRadius.circular(10),
-              //   image: DecorationImage(
-              //     image: NetworkImage(
-              //       "$SERVER_IP/$productImage",
-              //     ),
-              //     fit: BoxFit.cover,
-              //   ),
-              // ),
             ),
-          ),
-          SizedBox(height: 12),
-          Text(
-            productName,
-            style: TextStyle(
-              fontSize: 18,
-              color: Colors.black87,
-              fontWeight: FontWeight.w500,
+            SizedBox(height: 12),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: Text(
+                productName,
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ),
-          ),
-          SizedBox(height: 12),
-          Text(
-            productDesc,
-            style: TextStyle(color: Colors.black54),
-          ),
-          SizedBox(height: 8),
-        ],
+            SizedBox(height: 12),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: Text(
+                productDesc,
+                style: TextStyle(color: Colors.black54),
+              ),
+            ),
+            SizedBox(height: 8),
+          ],
+        ),
       ),
     );
   }

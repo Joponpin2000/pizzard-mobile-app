@@ -37,13 +37,15 @@ class CartScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  CheckOutButton(cart: cart),
                 ],
               ),
             )
           : Center(
               child: Text('Your Cart items show up here'),
             ),
+      floatingActionButton:
+          cart.items.length != 0 ? CheckOutButton(cart: cart) : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
