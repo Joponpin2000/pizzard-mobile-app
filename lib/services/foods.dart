@@ -7,7 +7,7 @@ class Foods with ChangeNotifier {
   List<dynamic> foods = [];
 
   Future<dynamic> getFoodsFromServer() async {
-    String url = "$SERVER_IP/api/products/";
+    String url = "$SERVER_IP/api/products";
 
     final http.Response response = await http.get(url);
 

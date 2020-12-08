@@ -3,7 +3,6 @@ import 'package:pizzard/models/cart.dart';
 import 'package:pizzard/services/foods.dart';
 import 'package:pizzard/shared/clip_shadow_path.dart';
 import 'package:pizzard/shared/helper_functions.dart';
-import 'package:pizzard/widgets/drawer.dart';
 import 'package:provider/provider.dart';
 
 class FoodItemScreen extends StatefulWidget {
@@ -34,35 +33,9 @@ class _FoodItemScreenState extends State<FoodItemScreen> {
     final cart = Provider.of<Cart>(context);
     getFood(loadedPdt);
     return Scaffold(
-      drawer: MyDrawerWidget(
-        darkThemeEnabled: widget.darkThemeEnabled,
-      ),
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(
-          color: Colors.black,
-        ),
         elevation: 0,
-        title: Text('Pizzards'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.notifications_outlined,
-              color: Colors.black,
-              size: 30,
-            ),
-            onPressed: null,
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.shopping_cart,
-              size: 30,
-              color: Colors.black,
-            ),
-            onPressed: null,
-            // () => of(context).pushNamed(CartScreen.routeName),
-          ),
-        ],
+        title: Text("${food['productName']}"),
       ),
       body: _loading
           ? Center(

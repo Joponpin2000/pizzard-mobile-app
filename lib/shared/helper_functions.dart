@@ -2,8 +2,12 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-const SERVER_IP = 'http://192.168.43.77:4000';
-// const SERVER_IP = 'http://192.168.43.201:4000';
+// const SERVER_IP = 'http://192.168.43.77:4000';
+const SERVER_IP = 'http://192.168.43.201:4000';
+
+getJwtToken() async {
+  return await HelperFunctions.getJwtSharedPreference();
+}
 
 Map<String, dynamic> parseJwt(String token) {
   final parts = token.split('.');

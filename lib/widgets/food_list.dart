@@ -3,9 +3,8 @@ import 'package:pizzard/widgets/food_tile.dart';
 
 class FoodList extends StatelessWidget {
   final List<dynamic> foods;
-  final bool darkThemeEnabled;
 
-  FoodList({this.foods, this.darkThemeEnabled});
+  FoodList({this.foods});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +16,7 @@ class FoodList extends StatelessWidget {
         return Container(
           height: MediaQuery.of(context).size.height / 2,
           margin: EdgeInsets.symmetric(vertical: 5),
-          child: FoodTile(darkThemeEnabled: darkThemeEnabled,
+          child: FoodTile(
           
             id: foods[index]['_id'],
             productCategory: foods[index]['productCategory'],

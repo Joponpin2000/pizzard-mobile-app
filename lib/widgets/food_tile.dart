@@ -11,17 +11,16 @@ class FoodTile extends StatelessWidget {
       productImage,
       productPrice,
       productQty;
-  final bool darkThemeEnabled;
 
-  FoodTile(
-      {@required this.id,
-      @required this.productName,
-      @required this.productDesc,
-      @required this.productCategory,
-      @required this.productImage,
-      @required this.productPrice,
-      @required this.productQty,
-      @required this.darkThemeEnabled});
+  FoodTile({
+    @required this.id,
+    @required this.productName,
+    @required this.productDesc,
+    @required this.productCategory,
+    @required this.productImage,
+    @required this.productPrice,
+    @required this.productQty,
+  });
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -30,7 +29,6 @@ class FoodTile extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => FoodItemScreen(
-              darkThemeEnabled: darkThemeEnabled,
               loadedId: id,
             ),
           ),

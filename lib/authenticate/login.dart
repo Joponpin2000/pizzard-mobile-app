@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pizzard/screens/home.dart';
+import 'package:pizzard/main.dart';
 import 'package:pizzard/services/auth.dart';
 import 'package:pizzard/shared/helper_functions.dart';
 
@@ -36,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => HomeScreen(widget.darkThemeEnabled),
+                builder: (context) => MainScreen(),
               ),
             );
           } else {

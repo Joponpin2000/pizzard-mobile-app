@@ -3,8 +3,6 @@ import 'package:pizzard/authenticate/login.dart';
 import 'package:pizzard/authenticate/signup.dart';
 
 class Authenticate extends StatefulWidget {
-  final bool darkThemeEnabled;
-  Authenticate(this.darkThemeEnabled);
   @override
   _AuthenticateState createState() => _AuthenticateState();
 }
@@ -23,12 +21,10 @@ class _AuthenticateState extends State<Authenticate> {
     if (showSignIn) {
       return LoginScreen(
         toggleView: toggleView,
-        darkThemeEnabled: widget.darkThemeEnabled,
       );
     } else {
       return SignUpScreen(
         toggleView: toggleView,
-        darkThemeEnabled: widget.darkThemeEnabled,
       );
     }
   }
