@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:pizzard/authenticate/check.dart';
 import 'package:pizzard/models/cart.dart';
-import 'package:pizzard/screens/Shipping.dart';
+import 'package:pizzard/models/orders.dart';
+import 'package:provider/provider.dart';
 
-class CheckOutButton extends StatefulWidget {
+class PlaceOrderButton extends StatefulWidget {
   final Cart cart;
-  const CheckOutButton({@required this.cart});
+  const PlaceOrderButton({@required this.cart});
 
   @override
-  _CheckOutButtonState createState() => _CheckOutButtonState();
+  _PlaceOrderButtonState createState() => _PlaceOrderButtonState();
 }
 
-class _CheckOutButtonState extends State<CheckOutButton> {
+class _PlaceOrderButtonState extends State<PlaceOrderButton> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -21,7 +22,7 @@ class _CheckOutButtonState extends State<CheckOutButton> {
         child: FlatButton(
             color: Theme.of(context).primaryColor,
             child: Text(
-              'Checkout',
+              'PlaceOrder',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
@@ -32,13 +33,10 @@ class _CheckOutButtonState extends State<CheckOutButton> {
                 : () async {
                     Future userIsLoggedIn = check();
                     if (userIsLoggedIn != null) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ShippingScreen(cart: widget.cart),
-                        ),
-                      );
+                      await Provider.of<Orders>(context, listen: false)
+                          .addOrder(widget.cart.items.values.toList(),
+                              widget.cart.totalAmount);
+                      // widget.cart.clear();
                     }
                   }),
       ),

@@ -1,6 +1,5 @@
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:pizzard/authenticate/authenticate.dart';
 import 'package:pizzard/models/cart.dart';
 import 'package:pizzard/models/orders.dart';
 import 'package:pizzard/screens/Cart.dart';
@@ -21,28 +20,32 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool userIsLoggedIn = false;
-
+  bool brightness;
   var payload;
+
   @override
   void initState() {
-    getLoggedInState();
+    getDarkThemeState();
     super.initState();
   }
 
-  getLoggedInState() async {
-    await HelperFunctions.getJwtSharedPreference().then((value) => {
+  getDarkThemeState() async {
+    await HelperFunctions.getDarkThemeSharedPreference().then((value) => {
           if (value != null)
             {
-              payload = parseJwt(value),
-              if (validateJwt(payload))
-                {
-                  setState(
-                    () {
-                      userIsLoggedIn = true;
-                    },
-                  ),
-                }
+              setState(
+                () {
+                  brightness = value;
+                },
+              ),
+            }
+          else
+            {
+              setState(
+                () {
+                  brightness = false;
+                },
+              ),
             }
         });
   }
@@ -64,8 +67,8 @@ class _MyAppState extends State<MyApp> {
       child: DynamicTheme(
         data: (brightness) {
           return ThemeData(
-            primaryColor: Colors.orangeAccent,
-            accentColor: Colors.blueGrey[900],
+            primaryColor: Colors.green,
+            accentColor: Colors.greenAccent,
             fontFamily: 'Circular',
             brightness: brightness == Brightness.dark
                 ? Brightness.dark
@@ -79,7 +82,8 @@ class _MyAppState extends State<MyApp> {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: theme,
-            home: userIsLoggedIn ? MainScreen() : Authenticate(),
+            home: MainScreen(),
+            title: "Pizzards",
           );
         },
       ),
@@ -102,6 +106,7 @@ class _MainScreenState extends State<MainScreen> {
   ];
   @override
   Widget build(BuildContext context) {
+    final cart = Provider.of<Cart>(context);
     return new Scaffold(
       body: pages[i],
       bottomNavigationBar: new BottomNavigationBar(
@@ -118,28 +123,45 @@ class _MainScreenState extends State<MainScreen> {
               Icons.home,
             ),
             label: "Home",
-            backgroundColor: Colors.orangeAccent,
+            backgroundColor: Theme.of(context).primaryColor,
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.search,
             ),
             label: "Search",
-            backgroundColor: Colors.orangeAccent,
+            backgroundColor: Theme.of(context).primaryColor,
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.shopping_cart,
+            icon: Stack(
+              children: [
+                cart.itemCount > 0
+                    ? Positioned(
+                        top: 0,
+                        right: 0,
+                        child: Container(
+                          height: 10,
+                          width: 10,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                      )
+                    : SizedBox(),
+                Icon(Icons.shopping_cart_outlined,
+                    size: 18, color: Colors.grey),
+              ],
             ),
             label: "Cart",
-            backgroundColor: Colors.orangeAccent,
+            backgroundColor: Theme.of(context).primaryColor,
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.settings,
             ),
             label: "Settings",
-            backgroundColor: Colors.orangeAccent,
+            backgroundColor: Theme.of(context).primaryColor,
           ),
         ],
       ),

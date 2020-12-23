@@ -6,6 +6,19 @@ import 'package:pizzard/shared/helper_functions.dart';
 class Foods with ChangeNotifier {
   List<dynamic> foods = [];
 
+  Future searchFoodFromServer(String query) async {
+    String url = "$SERVER_IP/api/search?q=$query";
+
+    final http.Response response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      foods = Products.fromJson(jsonDecode(response.body)).foods;
+      return Products.fromJson(jsonDecode(response.body)).foods;
+    } else {
+      throw Exception("Can't get contents");
+    }
+  }
+
   Future<dynamic> getFoodsFromServer() async {
     String url = "$SERVER_IP/api/products";
 

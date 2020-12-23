@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:pizzard/main.dart';
+import 'package:pizzard/screens/PlaceOrder.dart';
 import 'package:pizzard/services/auth.dart';
 import 'package:pizzard/shared/helper_functions.dart';
 
 class LoginScreen extends StatefulWidget {
   final Function toggleView;
   final bool darkThemeEnabled;
+  final bool redirectToOrder;
 
-  LoginScreen({this.toggleView, this.darkThemeEnabled});
+  LoginScreen({this.toggleView, this.darkThemeEnabled, this.redirectToOrder});
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -27,24 +29,40 @@ class _LoginScreenState extends State<LoginScreen> {
       });
       await attemptLogin(emailController.text, passwordController.text)
           .then((res) async {
-        setState(() {
-          isLoading = false;
-        });
-        if (res != null) {
-          if (await HelperFunctions.saveJwtSharedPreference(res.token) !=
+        if (res[0]["token"] != null && res[0]["token"] != "") {
+          setState(() {
+            isLoading = false;
+          });
+          if (await HelperFunctions.saveJwtSharedPreference(res[0]["token"]) !=
               null) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MainScreen(),
-              ),
-            );
+            
+            if (widget.redirectToOrder == true) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PlaceOrder(),
+                ),
+              );
+            } 
+            else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MainScreen(),
+                ),
+              );
+            }
           } else {
             AlertDialog(
               title: Text('Error'),
               content: Text('Please try again'),
             );
           }
+        } else {
+          setState(() {
+            isLoading = false;
+            error = res[0]["errorMessage"];
+          });
         }
       });
     }
@@ -82,14 +100,20 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       SizedBox(height: 10),
-                      Container(
-                        padding: EdgeInsets.all(8),
-                        child: Text(
-                          error,
-                          style: TextStyle(color: Colors.red),
+                      Center(
+                        child: Container(
+                          padding: EdgeInsets.all(8),
+                          child: Text(
+                            error,
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
-                      SizedBox(height: 12),
+                      SizedBox(height: 5),
                       Form(
                         key: _key,
                         child: Column(

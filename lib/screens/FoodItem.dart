@@ -84,13 +84,23 @@ class _FoodItemScreenState extends State<FoodItemScreen> {
                       food['productName'],
                       food['productPrice'].toDouble(),
                       food['productImage'],
+                      food['productQty'],
+                    );
+
+                    Scaffold.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Item added to cart.',
+                        ),
+                        duration: Duration(seconds: 3),
+                      ),
                     );
                   },
                   child: Container(
                     alignment: Alignment.center,
                     width: MediaQuery.of(context).size.width,
                     padding: EdgeInsets.symmetric(vertical: 15),
-                    color: Colors.deepOrange,
+                    color: Theme.of(context).primaryColor,
                     child: Text(
                       'Add to Cart',
                       style: TextStyle(color: Colors.white),

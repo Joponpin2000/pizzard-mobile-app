@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class SignUpScreen extends StatefulWidget {
   final Function toggleView;
   final bool darkThemeEnabled;
+  final bool redirectToOrder;
 
-  SignUpScreen({this.toggleView, this.darkThemeEnabled});
+  SignUpScreen({this.toggleView, this.darkThemeEnabled, this.redirectToOrder});
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
 }

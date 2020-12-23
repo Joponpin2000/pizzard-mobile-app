@@ -3,6 +3,9 @@ import 'package:pizzard/authenticate/login.dart';
 import 'package:pizzard/authenticate/signup.dart';
 
 class Authenticate extends StatefulWidget {
+  final bool redirectToOrder;
+
+  Authenticate({this.redirectToOrder});
   @override
   _AuthenticateState createState() => _AuthenticateState();
 }
@@ -20,12 +23,12 @@ class _AuthenticateState extends State<Authenticate> {
   Widget build(BuildContext context) {
     if (showSignIn) {
       return LoginScreen(
-        toggleView: toggleView,
-      );
+          toggleView: toggleView,
+          redirectToOrder: widget.redirectToOrder == true ? true : false);
     } else {
       return SignUpScreen(
-        toggleView: toggleView,
-      );
+          toggleView: toggleView,
+          redirectToOrder: widget.redirectToOrder == true ? true : false);
     }
   }
 }

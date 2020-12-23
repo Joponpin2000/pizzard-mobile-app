@@ -4,9 +4,15 @@ import 'package:pizzard/widgets/cart_item.dart';
 import 'package:pizzard/widgets/checkoutbtn.dart';
 import 'package:provider/provider.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   final bool darkThemeEnabled;
   CartScreen({this.darkThemeEnabled});
+
+  @override
+  _CartScreenState createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context);
@@ -14,13 +20,32 @@ class CartScreen extends StatelessWidget {
       body: cart.items.length != 0
           ? SafeArea(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    margin: EdgeInsets.only(top: 15, bottom: 5),
+                    margin: EdgeInsets.only(
+                      top: 15,
+                      left: 15,
+                      right: 15,
+                    ),
                     child: Text(
-                      "<<<<<  Swipe left to remove item from cart",
+                      "Cart",
                       style: TextStyle(
-                        color: Colors.orangeAccent,
+                        fontSize: 28,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(
+                      top: 15,
+                      bottom: 5,
+                      left: 15,
+                      right: 15,
+                    ),
+                    child: Text(
+                      "<<<  Swipe left to remove item from cart",
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
                   ),
@@ -31,9 +56,12 @@ class CartScreen extends StatelessWidget {
                         id: cart.items.values.toList()[index].id,
                         // index: cart.items.keys.toList()[index],
                         price: cart.items.values.toList()[index].price,
-                        quantity: cart.items.values.toList()[index].quantity,
+                        loadedQuantity:
+                            cart.items.values.toList()[index].quantity,
                         name: cart.items.values.toList()[index].name,
                         image: cart.items.values.toList()[index].image,
+                        productQty:
+                            cart.items.values.toList()[index].productQty,
                       ),
                     ),
                   ),

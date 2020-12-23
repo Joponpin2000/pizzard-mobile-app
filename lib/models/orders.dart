@@ -1,9 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 import 'package:pizzard/models/cart.dart';
-import 'package:pizzard/shared/helper_functions.dart';
 
 class OrderItem {
   final String id;
@@ -27,43 +24,45 @@ class Orders with ChangeNotifier {
   }
 
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
-    final token = await getJwtToken();
-    final url = "$SERVER_IP/api/paystack/pay";
-    final timeStamp = DateTime.now();
-    try {
-      final response = await http.post(url,
-          headers: {"authorization": "Bearer $token"},
-          body: json.encode({
-            'id': DateTime.now().toString(),
-            // multiply amount by 100 as paystack charges in kobo
-            'amount': total * 100,
-            // email,
-            // name
-            'dateTime': timeStamp.toIso8601String(),
-            'products': cartProducts
-                .map((cp) => {
-                      'id': cp.id,
-                      'title': cp.name,
-                      'quantity': cp.quantity,
-                      'price': cp.price,
-                    })
-                .toList()
-          }));
-      print(response.body);
+    // final token = await getJwtToken();
+    // final email = await HelperFunctions.getUserEmailSharedPreference();
+    // final name = await HelperFunctions.getUserNameSharedPreference();
+    // final url = "$SERVER_IP/api/paystack/pay";
+    // try {
+    //   final response = await http.post(
+    //     url,
+    //     headers: {"authorization": "Bearer $token"},
+    //     body: {
+    //       'id': DateTime.now().toString(),
 
-      if (response.statusCode == 200) {
-        _orders.insert(
-            0,
-            OrderItem(
-              id: jsonDecode(response.body)['name'],
-              amount: total,
-              dateTime: timeStamp,
-              products: cartProducts,
-            ));
-      }
-      notifyListeners();
-    } catch (err) {
-      throw err;
-    }
+    //       'amount': (total * 100)
+    //           .toString(), // multiply amount by 100 as paystack charges in kobo
+    //       "email": email,
+    //       "name": name,
+    //     },
+    //   );
+
+    //   if (response.statusCode == 200) {
+    //     try {
+    //       final http.Response pay =
+    //           await http.get(jsonDecode(response.body)["url"]);
+    //       print(pay.body);
+    //     } catch (err) {
+    //       throw err;
+    //     }
+
+    //     // _orders.insert(
+    //     //     0,
+    //     //     OrderItem(
+    //     //       id: jsonDecode(response.body)['name'],
+    //     //       amount: total,
+    //     //       dateTime: timeStamp,
+    //     //       products: cartProducts,
+    //     //     ));
+    //   }
+    //   notifyListeners();
+    // } catch (err) {
+    //   throw err;
+    // }
   }
 }

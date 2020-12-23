@@ -8,7 +8,11 @@ class Resp {
   var token;
 }
 
-Future<Response> attemptLogin(String email, String password) async {
+Future attemptLogin(String email, String password) async {
+  var res = [
+    {"token": ""},
+    {"errorMessage": ""},
+  ];
   final http.Response response = await http.post(
     "$SERVER_IP/api/auth/login",
     body: {
@@ -18,9 +22,18 @@ Future<Response> attemptLogin(String email, String password) async {
   );
 
   if (response.statusCode == 200) {
-    return Response.fromJson(jsonDecode(response.body));
+    res[0]["token"] = "${Response.fromJson(jsonDecode(response.body)).token}";
+    var email = "${Response.fromJson(jsonDecode(response.body)).user.email}";
+    var username = "${Response.fromJson(jsonDecode(response.body)).user.username}";
+    await HelperFunctions.saveUserEmailSharedPreference(
+                email);
+            await HelperFunctions.saveUserNameSharedPreference(
+          username);
+    return res;
   } else {
-    return null;
+    res[0]["errorMessage"] =
+        jsonDecode(response.body)["errorMessage"].toString();
+    return res;
   }
 }
 

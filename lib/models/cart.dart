@@ -6,14 +6,15 @@ class CartItem {
   final int quantity;
   final double price;
   final String image;
+  final int productQty;
 
-  CartItem({
-    @required this.id,
-    @required this.name,
-    @required this.quantity,
-    @required this.price,
-    @required this.image,
-  });
+  CartItem(
+      {@required this.id,
+      @required this.name,
+      @required this.quantity,
+      @required this.price,
+      @required this.image,
+      @required this.productQty});
 }
 
 class Cart with ChangeNotifier {
@@ -27,7 +28,8 @@ class Cart with ChangeNotifier {
     return _items.length;
   }
 
-  void addItem(String pdtId, String name, double price, String image) {
+  void addItem(
+      String pdtId, String name, double price, String image, int productQty) {
     if (_items.containsKey(pdtId)) {
       _items.update(
           pdtId,
@@ -37,6 +39,7 @@ class Cart with ChangeNotifier {
                 quantity: existingCartItem.quantity + 1,
                 price: existingCartItem.price,
                 image: existingCartItem.image,
+                productQty: existingCartItem.productQty,
               ));
     } else {
       _items.putIfAbsent(
@@ -46,7 +49,8 @@ class Cart with ChangeNotifier {
               id: DateTime.now().toString(),
               quantity: 1,
               price: price,
-              image: image));
+              image: image,
+              productQty: productQty));
     }
 
     notifyListeners();
@@ -70,6 +74,7 @@ class Cart with ChangeNotifier {
                 quantity: existingCartItem.quantity - 1,
                 price: existingCartItem.price,
                 image: existingCartItem.image,
+                productQty: existingCartItem.productQty,
               ));
     }
     notifyListeners();
@@ -87,4 +92,23 @@ class Cart with ChangeNotifier {
     _items = {};
     notifyListeners();
   }
+
+  List<int> convertQtyToList() {
+    var listItems = [];
+    _items.forEach((key, cartItem) {
+      List<int> numbers = [];
+      for (int i = 1; i <= cartItem.productQty; i++) {
+        numbers.add(i);
+      }
+      return listItems.add(IterableList(id: cartItem.id, list: numbers));
+    });
+    return listItems;
+  }
+}
+
+class IterableList {
+  final String id;
+  final List list;
+
+  IterableList({this.id, this.list});
 }

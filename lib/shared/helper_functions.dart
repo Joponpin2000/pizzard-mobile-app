@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // const SERVER_IP = 'http://192.168.43.77:4000';
 const SERVER_IP = 'http://192.168.43.201:4000';
+const PUBLIC_KEY = 'sk_test_dca2a0d8142d174620a38e6e49697b1686b0fbc5';
 
 getJwtToken() async {
   return await HelperFunctions.getJwtSharedPreference();
@@ -52,16 +53,64 @@ bool validateJwt(payload) {
 
 class HelperFunctions {
   static String sharedPreferenceUserLoggedInKey = "ISLOGGEDIN";
+  static String sharedPreferenceUserNameKey = "USERNAMEKEY";
+  static String sharedPreferenceUserEmailKey = "USEREMAILKEY";
   static String sharedPreferenceJwtKey = "jwt";
+  static String sharedPreferenceDarkThemeKey = "DARKTHEME";
 
   static Future<bool> saveJwtSharedPreference(String jwt) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return await prefs.setString(sharedPreferenceJwtKey, jwt);
   }
 
+  static Future<bool> saveUserNameSharedPreference(String userName) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return await prefs.setString(sharedPreferenceUserNameKey, userName);
+  }
+
+  static Future<bool> saveUserEmailSharedPreference(String userEmail) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return await prefs.setString(sharedPreferenceUserEmailKey, userEmail);
+  }
+
+  static Future<bool> saveDarkThemeSharedPreference(bool jwt) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return await prefs.setBool(sharedPreferenceDarkThemeKey, jwt);
+  }
+
   static Future<String> getJwtSharedPreference() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String value = prefs.getString(sharedPreferenceJwtKey);
     return value;
+  }
+
+  static Future<String> getUserNameSharedPreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(sharedPreferenceUserNameKey);
+  }
+
+  static Future<String> getUserEmailSharedPreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(sharedPreferenceUserEmailKey);
+  }
+
+  static Future<bool> getDarkThemeSharedPreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool value = prefs.getBool(sharedPreferenceDarkThemeKey);
+    return value;
+  }
+
+  static deleteLoginSharedPreference(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var rs = prefs.remove(key);
+    print('okay');
+    print(rs);
+  }
+
+  static signOut() async {
+    await deleteLoginSharedPreference(sharedPreferenceUserLoggedInKey);
+    await deleteLoginSharedPreference(sharedPreferenceJwtKey);
+    await deleteLoginSharedPreference(sharedPreferenceUserNameKey);
+    await deleteLoginSharedPreference(sharedPreferenceUserEmailKey);
   }
 }

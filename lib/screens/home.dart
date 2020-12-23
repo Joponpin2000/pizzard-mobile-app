@@ -12,20 +12,22 @@ class _HomeScreenState extends State<HomeScreen> {
   List<dynamic> foods;
   bool _loading = true;
 
-  getFoods(items) async {
-    if (items != null && items != []) {
-      setState(() {
-        _loading = false;
-        foods = items;
-      });
+  getFoods(items) {
+    if (this.mounted) {
+      if (items != null && items != []) {
+        setState(() {
+          _loading = false;
+          foods = items;
+        });
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final productData = Provider.of<Foods>(context);
-
     productData.getFoodsFromServer().then((value) => getFoods(value));
+
     return Scaffold(
       body: _loading
           ? Center(
@@ -34,20 +36,38 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             )
           : SafeArea(
+              top: true,
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Container(
+                      margin: EdgeInsets.only(
+                        top: 20,
+                        bottom: 5,
+                        left: 15,
+                        right: 15,
+                      ),
+                      child: Text(
+                        "What would you like",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          // color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                    ),
                     Container(
                       margin: EdgeInsets.symmetric(
                         horizontal: 15,
                         vertical: 5,
                       ),
                       child: Text(
-                        "Popular",
+                        "to eat?",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                          fontSize: 28,
+                          // color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ),

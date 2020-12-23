@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:pizzard/screens/FoodItem.dart';
+import 'package:pizzard/models/cart.dart';
 import 'package:pizzard/shared/helper_functions.dart';
+import 'package:provider/provider.dart';
+import 'package:shape_of_view/shape_of_view.dart';
 
-class FoodTile extends StatelessWidget {
+class FoodTile extends StatefulWidget {
   final id,
       productName,
       productDesc,
@@ -21,18 +23,96 @@ class FoodTile extends StatelessWidget {
     @required this.productPrice,
     @required this.productQty,
   });
+
+  @override
+  _FoodTileState createState() => _FoodTileState();
+}
+
+class _FoodTileState extends State<FoodTile> {
   @override
   Widget build(BuildContext context) {
+    final cart = Provider.of<Cart>(context);
+    void _showPanel() {
+      showModalBottomSheet(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25),),
+          ),
+          isScrollControlled: true,
+          context: context,
+          builder: (context) {
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * 0.5,
+                    child: Hero(
+                      tag: widget.productImage,
+                      child: Image(
+                        image: NetworkImage(
+                          "$SERVER_IP/${widget.productImage}",
+                        ),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      title: Text(
+                        '${widget.productName}',
+                      ),
+                      subtitle: Text(
+                        '${widget.productDesc}',
+                      ),
+                      trailing: Text('\$${widget.productPrice}'),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      cart.addItem(
+                        widget.id,
+                        widget.productName,
+                        widget.productPrice.toDouble(),
+                        widget.productImage,
+                        widget.productQty,
+                      );
+                      // _key.currentState.showSnackBar(
+                      //   SnackBar(
+                      //     content: Text(
+                      //       'Item added to cart.',
+                      //     ),
+                      //     duration: Duration(seconds: 3),
+                      //   ),
+                      // );
+                      // Scaffold.of(context).showSnackBar(
+                      //   SnackBar(
+                      //     content: Text(
+                      //       'Item added to cart.',
+                      //     ),
+                      //     duration: Duration(seconds: 3),
+                      //   ),
+                      // );
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                      color: Theme.of(context).primaryColor,
+                      child: Text(
+                        'Add to Cart',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          });
+    }
+
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => FoodItemScreen(
-              loadedId: id,
-            ),
-          ),
-        );
+        _showPanel();
       },
       child: Container(
         decoration: BoxDecoration(
@@ -49,12 +129,12 @@ class FoodTile extends StatelessWidget {
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 child: Hero(
-                  tag: productImage,
+                  tag: widget.productImage,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Image(
                       image: NetworkImage(
-                        "$SERVER_IP/$productImage",
+                        "$SERVER_IP/${widget.productImage}",
                       ),
                       fit: BoxFit.cover,
                     ),
@@ -66,10 +146,9 @@ class FoodTile extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 15),
               child: Text(
-                productName,
+                widget.productName,
                 style: TextStyle(
                   fontSize: 18,
-                  color: Colors.black87,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -77,9 +156,18 @@ class FoodTile extends StatelessWidget {
             SizedBox(height: 12),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 15),
-              child: Text(
-                productDesc,
-                style: TextStyle(color: Colors.black54),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    widget.productDesc,
+                    style: TextStyle(fontWeight: FontWeight.w300),
+                  ),
+                  Text(
+                    '\$${widget.productPrice.toString()}',
+                    style: TextStyle(fontWeight: FontWeight.w300),
+                  ),
+                ],
               ),
             ),
             SizedBox(height: 8),
