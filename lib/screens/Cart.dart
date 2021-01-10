@@ -22,30 +22,32 @@ class _CartScreenState extends State<CartScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  //   Container(
+                  //     margin: EdgeInsets.only(
+                  //       top: 15,
+                  //       left: 15,
+                  //       right: 15,
+                  //     ),
+                  //     child: Text(
+                  //       "Cart",
+                  //       style: TextStyle(
+                  //         fontSize: 28,
+                  //       ),
+                  //     ),
+                  //   ),
                   Container(
                     margin: EdgeInsets.only(
-                      top: 15,
+                      top: 10,
+                      bottom: 10,
                       left: 15,
                       right: 15,
                     ),
-                    child: Text(
-                      "Cart",
-                      style: TextStyle(
-                        fontSize: 28,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(
-                      top: 15,
-                      bottom: 5,
-                      left: 15,
-                      right: 15,
-                    ),
-                    child: Text(
-                      "<<<  Swipe left to remove item from cart",
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
+                    child: Center(
+                      child: Text(
+                        "<<<  Swipe left to remove item from cart",
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                        ),
                       ),
                     ),
                   ),
@@ -54,7 +56,6 @@ class _CartScreenState extends State<CartScreen> {
                       itemCount: cart.items.length,
                       itemBuilder: (context, index) => CartPdt(
                         id: cart.items.values.toList()[index].id,
-                        // index: cart.items.keys.toList()[index],
                         price: cart.items.values.toList()[index].price,
                         loadedQuantity:
                             cart.items.values.toList()[index].quantity,
@@ -65,15 +66,13 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                     ),
                   ),
+                  cart.items.length != 0 ? CheckOutButton(cart: cart) : null,
                 ],
               ),
             )
           : Center(
-              child: Text('Your Cart items show up here'),
+              child: Text('Your Cart is empty'),
             ),
-      floatingActionButton:
-          cart.items.length != 0 ? CheckOutButton(cart: cart) : null,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

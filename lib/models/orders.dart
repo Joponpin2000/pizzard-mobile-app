@@ -17,13 +17,20 @@ class OrderItem {
 }
 
 class Orders with ChangeNotifier {
-  List<OrderItem> _orders = [];
+  List _orders = [];
 
-  List<OrderItem> get orders {
+  List get orders {
     return [..._orders];
   }
 
-  Future<void> addOrder(List<CartItem> cartProducts, double total) async {
+   addOrder(List<CartItem> cartProducts, double total) async {
+    _orders = cartProducts;
+    notifyListeners();
+    return orders;
+
+
+
+
     // final token = await getJwtToken();
     // final email = await HelperFunctions.getUserEmailSharedPreference();
     // final name = await HelperFunctions.getUserNameSharedPreference();

@@ -1,6 +1,8 @@
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:pizzard/main.dart';
+import 'package:pizzard/screens/AppInfo.dart';
+import 'package:pizzard/screens/PlaceOrder.dart';
 import 'package:pizzard/shared/helper_functions.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -47,32 +49,116 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: SafeArea(
         child: ListView(
           children: [
-            ListTile(
-              leading: Text('Change Theme'),
-              trailing: IconButton(
-                icon: Icon(Theme.of(context).brightness == Brightness.light
-                    ? Icons.lightbulb_outline
-                    : Icons.highlight),
-                onPressed: () {
-                  DynamicTheme.of(context).setBrightness(
-                    Theme.of(context).brightness == Brightness.light
-                        ? Brightness.dark
-                        : Brightness.light,
-                  );
-                  saveDarkTheme();
-                },
+            SizedBox(height: 20),
+            Container(
+              child: ListTile(
+                leading: Icon(
+                  Icons.color_lens,
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? Theme.of(context).primaryColor
+                      : Theme.of(context).accentColor,
+                ),
+                title: Text('Dark Theme'),
+                trailing: Switch(
+                  value: Theme.of(context).brightness == Brightness.light
+                      ? false
+                      : true,
+                  onChanged: (value) {
+                    DynamicTheme.of(context).setBrightness(
+                      value ? Brightness.dark : Brightness.light,
+                    );
+                    saveDarkTheme();
+                  },
+                ),
               ),
             ),
+            Container(
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.black
+                  : Colors.white,
+              height: 0.1,
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PlaceOrder(),
+                  ),
+                );
+              },
+              child: Container(
+                child: ListTile(
+                  leading: Icon(
+                    Icons.home_outlined,
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Theme.of(context).primaryColor
+                        : Theme.of(context).accentColor,
+                  ),
+                  title: Text('Orders'),
+                ),
+              ),
+            ),
+            Container(
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.black
+                  : Colors.white,
+              height: 0.1,
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AppInfoScreen(),
+                  ),
+                );
+              },
+              child: Container(
+                padding: EdgeInsets.only(top: 10),
+                child: ListTile(
+                  leading: Icon(
+                    Icons.info_outline,
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Theme.of(context).primaryColor
+                        : Theme.of(context).accentColor,
+                  ),
+                  title: Text('App info'),
+                ),
+              ),
+            ),
+            Container(
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.black
+                  : Colors.white,
+              height: 0.1,
+            ),
+            SizedBox(height: 10),
             _logout
-                ? ListTile(
-                    leading: GestureDetector(
-                      onTap: () async {
-                        signOut();
-                      },
-                      child: Text('Logout'),
+                ? GestureDetector(
+                    onTap: () async {
+                      signOut();
+                    },
+                    child: Container(
+                      child: ListTile(
+                        leading: Icon(
+                          Icons.logout,
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? Theme.of(context).primaryColor
+                                  : Theme.of(context).accentColor,
+                        ),
+                        title: Text('Logout'),
+                      ),
                     ),
                   )
                 : Container(),
+            Container(
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.black
+                  : Colors.white,
+              height: 0.1,
+            ),
           ],
         ),
       ),

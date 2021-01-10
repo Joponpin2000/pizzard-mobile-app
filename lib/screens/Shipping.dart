@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pizzard/authenticate/authenticate.dart';
 import 'package:pizzard/models/cart.dart';
+import 'package:pizzard/models/orders.dart';
 import 'package:pizzard/screens/PlaceOrder.dart';
 import 'package:pizzard/shared/helper_functions.dart';
+import 'package:provider/provider.dart';
 
 class ShippingScreen extends StatefulWidget {
   final Cart cart;
@@ -20,10 +22,13 @@ class _ShippingScreenState extends State<ShippingScreen> {
   TextEditingController cityController = new TextEditingController();
   TextEditingController countryController = new TextEditingController();
 
-  placeOrder() async {
+  placeOrder(cart,orderInstance) async {
     final token = await getJwtToken();
     if (token != null) {
-      Navigator.push(
+      orderInstance.addOrder(cart.items.values.toList(), cart.totalAmount);
+    cart.clear();
+
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => PlaceOrder(),
@@ -43,6 +48,9 @@ class _ShippingScreenState extends State<ShippingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cart = Provider.of<Cart>(context);
+    final orderInstance = Provider.of<Orders>(context);
+
     return Scaffold(
       body: isLoading
           ? Container(
@@ -116,12 +124,11 @@ class _ShippingScreenState extends State<ShippingScreen> {
                                   setState(() {
                                     isLoading = true;
                                   });
-                                  placeOrder();
+                                  placeOrder(cart,orderInstance);
                                 }
                               },
                               child: Container(
                                 alignment: Alignment.center,
-                                // width: MediaQuery.of(context).size.width,
                                 padding: EdgeInsets.symmetric(
                                   vertical: 15,
                                   horizontal: 10,

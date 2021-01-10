@@ -34,7 +34,7 @@ class Cart with ChangeNotifier {
       _items.update(
           pdtId,
           (existingCartItem) => CartItem(
-                id: DateTime.now().toString(),
+                id: pdtId,
                 name: existingCartItem.name,
                 quantity: existingCartItem.quantity + 1,
                 price: existingCartItem.price,
@@ -46,7 +46,7 @@ class Cart with ChangeNotifier {
           pdtId,
           () => CartItem(
               name: name,
-              id: DateTime.now().toString(),
+              id: pdtId,
               quantity: 1,
               price: price,
               image: image,
@@ -69,7 +69,7 @@ class Cart with ChangeNotifier {
       _items.update(
           id,
           (existingCartItem) => CartItem(
-                id: DateTime.now().toString(),
+                id: id,
                 name: existingCartItem.name,
                 quantity: existingCartItem.quantity - 1,
                 price: existingCartItem.price,
@@ -77,6 +77,25 @@ class Cart with ChangeNotifier {
                 productQty: existingCartItem.productQty,
               ));
     }
+    notifyListeners();
+  }
+
+  void updateSingleItem(String id, int qty) {
+    if (!_items.containsKey(id)) {
+      return;
+    }
+    _items.update(
+      id,
+      (existingCartItem) => CartItem(
+        id: id,
+        name: existingCartItem.name,
+        quantity: qty,
+        price: existingCartItem.price,
+        image: existingCartItem.image,
+        productQty: existingCartItem.productQty,
+      ),
+    );
+
     notifyListeners();
   }
 
@@ -92,6 +111,7 @@ class Cart with ChangeNotifier {
     _items = {};
     notifyListeners();
   }
+
 
   List<int> convertQtyToList() {
     var listItems = [];

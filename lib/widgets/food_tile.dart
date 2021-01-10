@@ -3,7 +3,6 @@ import 'package:flutter/rendering.dart';
 import 'package:pizzard/models/cart.dart';
 import 'package:pizzard/shared/helper_functions.dart';
 import 'package:provider/provider.dart';
-import 'package:shape_of_view/shape_of_view.dart';
 
 class FoodTile extends StatefulWidget {
   final id,
@@ -34,9 +33,6 @@ class _FoodTileState extends State<FoodTile> {
     final cart = Provider.of<Cart>(context);
     void _showPanel() {
       showModalBottomSheet(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(25),),
-          ),
           isScrollControlled: true,
           context: context,
           builder: (context) {
@@ -76,22 +72,6 @@ class _FoodTileState extends State<FoodTile> {
                         widget.productImage,
                         widget.productQty,
                       );
-                      // _key.currentState.showSnackBar(
-                      //   SnackBar(
-                      //     content: Text(
-                      //       'Item added to cart.',
-                      //     ),
-                      //     duration: Duration(seconds: 3),
-                      //   ),
-                      // );
-                      // Scaffold.of(context).showSnackBar(
-                      //   SnackBar(
-                      //     content: Text(
-                      //       'Item added to cart.',
-                      //     ),
-                      //     duration: Duration(seconds: 3),
-                      //   ),
-                      // );
                     },
                     child: Container(
                       alignment: Alignment.center,

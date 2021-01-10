@@ -3,19 +3,20 @@ import 'package:pizzard/main.dart';
 import 'package:pizzard/screens/PlaceOrder.dart';
 import 'package:pizzard/services/auth.dart';
 import 'package:pizzard/shared/helper_functions.dart';
+import 'package:shape_of_view/shape_of_view.dart';
 
 class LoginScreen extends StatefulWidget {
   final Function toggleView;
-  final bool darkThemeEnabled;
   final bool redirectToOrder;
 
-  LoginScreen({this.toggleView, this.darkThemeEnabled, this.redirectToOrder});
+  LoginScreen({this.toggleView, this.redirectToOrder});
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
   bool isLoading = false;
+  bool _obscureText = true;
   final _key = GlobalKey<FormState>();
 
   String error = '';
@@ -27,7 +28,8 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         isLoading = true;
       });
-      await attemptLogin(emailController.text, passwordController.text)
+      await attemptLogin(
+              emailController.text.trim(), passwordController.text.trim())
           .then((res) async {
         if (res[0]["token"] != null && res[0]["token"] != "") {
           setState(() {
@@ -35,7 +37,6 @@ class _LoginScreenState extends State<LoginScreen> {
           });
           if (await HelperFunctions.saveJwtSharedPreference(res[0]["token"]) !=
               null) {
-            
             if (widget.redirectToOrder == true) {
               Navigator.pushReplacement(
                 context,
@@ -43,8 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   builder: (context) => PlaceOrder(),
                 ),
               );
-            } 
-            else {
+            } else {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -77,119 +77,158 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: CircularProgressIndicator(),
               ),
             )
-          : SafeArea(
-              top: true,
-              child: SingleChildScrollView(
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(30, 50, 30, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Text(
-                        'Hello.',
-                        style: TextStyle(
-                          fontSize: 40,
-                          fontWeight: FontWeight.w600,
-                        ),
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  ShapeOfView(
+                    shape: ArcShape(
+                      direction: ArcDirection.Outside,
+                      height: 20,
+                      position: ArcPosition.Bottom,
+                    ),
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height * 0.3,
+                    child: Image(
+                      image: AssetImage(
+                        "assets/log.jpg",
                       ),
-                      Text(
-                        'Welcome Back',
-                        style: TextStyle(
-                          fontSize: 40,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Center(
-                        child: Container(
-                          padding: EdgeInsets.all(8),
-                          child: Text(
-                            error,
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      Form(
-                        key: _key,
-                        child: Column(
-                          children: <Widget>[
-                            TextFormField(
-                              decoration: InputDecoration(hintText: 'Email'),
-                              controller: emailController,
-                              validator: (val) {
-                                return RegExp(
-                                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                        .hasMatch(val)
-                                    ? null
-                                    : "Please provide a valid Email";
-                              },
-                            ),
-                            SizedBox(height: 30),
-                            TextFormField(
-                              decoration: InputDecoration(hintText: 'Password'),
-                              obscureText: true,
-                              controller: passwordController,
-                              validator: (value) => value.length < 6
-                                  ? 'Password should be 6+ chars long'
-                                  : null,
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 15),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          Text(
-                            'Forgot Password?',
-                            style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 50),
-                      GestureDetector(
-                        onTap: () {
-                          login();
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: MediaQuery.of(context).size.width,
-                          padding: EdgeInsets.symmetric(vertical: 15),
-                          color: Theme.of(context).primaryColor,
-                          child: Text(
-                            'Login',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      GestureDetector(
-                        onTap: () {
-                          widget.toggleView();
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          child: Text(
-                            'Create Account',
-                            style: TextStyle(
-                              color: Theme.of(context).accentColor,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                    ],
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(30, 20, 30, 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Center(
+                          child: Text(
+                            'Sign In',
+                            style: TextStyle(
+                              fontSize: 30,
+                            ),
+                          ),
+                        ),
+                        error != null && error.isNotEmpty
+                            ? Center(
+                                child: Container(
+                                  margin: EdgeInsets.only(
+                                    top: 12,
+                                  ),
+                                  child: Text(
+                                    error,
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Container(),
+                        SizedBox(height: 5),
+                        Form(
+                          key: _key,
+                          child: Column(
+                            children: <Widget>[
+                              TextFormField(
+                                decoration: InputDecoration(hintText: 'Email'),
+                                controller: emailController,
+                                validator: (val) {
+                                  return RegExp(
+                                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                          .hasMatch(val)
+                                      ? null
+                                      : "Please provide a valid Email";
+                                },
+                              ),
+                              SizedBox(height: 20),
+                              TextFormField(
+                                decoration: InputDecoration(
+                                  hintText: 'Password',
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      _obscureText
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                    ),color: Theme.of(context).primaryColor,onPressed: () {
+                                      setState(() {
+                                        _obscureText  =  !_obscureText;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                obscureText: _obscureText,
+                                controller: passwordController,
+                                validator: (value) => value.length < 6
+                                    ? 'Password should be 6+ chars long'
+                                    : null,
+                              ),
+                            ],
+                          ),
+                        ),
+                        // SizedBox(height: 15),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.end,
+                        //   children: <Widget>[
+                        //     Text(
+                        //       'Forgot Password?',
+                        //       style: TextStyle(
+                        //         color: Theme.of(context).primaryColor,
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
+                        SizedBox(height: 20),
+                        GestureDetector(
+                          onTap: () {
+                            login();
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: MediaQuery.of(context).size.width,
+                            padding: EdgeInsets.symmetric(vertical: 15),
+                            color: Theme.of(context).primaryColor,
+                            child: Text(
+                              'Sign In',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 30),
+                        Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(right: 10),
+                                child: Text(
+                                  'Don\'t have an account?',
+                                  style: TextStyle(),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  widget.toggleView();
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.all(8),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'Sign Up',
+                                    style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        SizedBox(height: 20),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
     );

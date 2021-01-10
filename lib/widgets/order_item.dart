@@ -63,6 +63,7 @@ class _OrderPdtState extends State<OrderPdt> {
         title: Text(
           widget.name,
         ),
+        subtitle: Text("$quantity x"),
         trailing: Text(
           'Total: \$${widget.price * quantity}',
         ),

@@ -86,15 +86,6 @@ class _FoodItemScreenState extends State<FoodItemScreen> {
                       food['productImage'],
                       food['productQty'],
                     );
-
-                    Scaffold.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          'Item added to cart.',
-                        ),
-                        duration: Duration(seconds: 3),
-                      ),
-                    );
                   },
                   child: Container(
                     alignment: Alignment.center,

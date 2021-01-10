@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pizzard/models/cart.dart';
 import 'package:pizzard/shared/helper_functions.dart';
 import 'package:provider/provider.dart';
@@ -25,26 +26,18 @@ class CartPdt extends StatefulWidget {
 }
 
 class _CartPdtState extends State<CartPdt> {
-  int quantity;
-  List<int> iterable = [];
+  String quantity;
+
   @override
   void initState() {
     super.initState();
-    quantity = widget.loadedQuantity;
-    iterable = convertQtyToList(widget.productQty);
-  }
-
-  List<int> convertQtyToList(number) {
-    List<int> numbers = [];
-    for (int i = 1; i <= number; i++) {
-      numbers.add(i);
-    }
-    return numbers;
+    quantity = widget.loadedQuantity.toString();
   }
 
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final cart = Provider.of<Cart>(context);
     return Dismissible(
       key: ValueKey(widget.id),
       direction: DismissDirection.endToStart,
@@ -52,8 +45,7 @@ class _CartPdtState extends State<CartPdt> {
         color: Colors.red,
       ),
       onDismissed: (direction) {
-        Provider.of<Cart>(context).removeItem(widget.id);
-
+        Provider.of<Cart>(context, listen: false).removeItem(widget.id);
       },
       child: Card(
         child: ListTile(
@@ -75,34 +67,25 @@ class _CartPdtState extends State<CartPdt> {
           ),
           subtitle: Form(
             key: _formKey,
-            child: DropdownButtonFormField(
+            child: TextFormField(
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+              ],
+              initialValue: widget.loadedQuantity.toString(),
+              onChanged: (val) {
+                if (val.isNotEmpty) {
+                  setState(() => quantity = val);
+                  cart.updateSingleItem(widget.id, int.parse(val));
+                }
+              },
               decoration: InputDecoration(
-                // fillColor: Colors.white,
                 filled: true,
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Theme.of(context).primaryColor,
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Theme.of(context).primaryColor,
-                    width: 2,
-                  ),
-                ),
               ),
-              value: widget.loadedQuantity,
-              items: iterable.map((qt) {
-                return DropdownMenuItem(
-                  value: qt,
-                  child: Text('$qt'),
-                );
-              }).toList(),
-              onChanged: (val) => setState(() => quantity = val),
             ),
           ),
           trailing: Text(
-            'Total: \$${widget.price * quantity}',
+            'Total: \$${widget.price * int.parse(quantity)}',
           ),
         ),
       ),

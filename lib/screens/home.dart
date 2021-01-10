@@ -51,9 +51,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Text(
                         "What would you like",
                         style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                          // fontWeight: FontWeight.bold,
                           fontSize: 20,
-                          // color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ),
@@ -66,8 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         "to eat?",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 28,
-                          // color: Theme.of(context).primaryColor,
+                          fontSize: 26,
                         ),
                       ),
                     ),
