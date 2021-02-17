@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-// const SERVER_IP = 'http://192.168.43.77:4000';
-const SERVER_IP = 'http://192.168.43.201:4000';
-const PUBLIC_KEY = 'sk_test_dca2a0d8142d174620a38e6e49697b1686b0fbc5';
+const SERVER_IP = 'http://pizzard.herokuapp.com';
+// const SERVER_IP = 'http://192.168.43.201:4000';
+const PUBLIC_KEY = 'pk_test_b5c70113d9924c7dc4fd61a362c51fe24c5c3181';
+
+const String appName = 'Pizzards';
 
 getJwtToken() async {
   return await HelperFunctions.getJwtSharedPreference();

@@ -34,7 +34,7 @@ class AppInfoScreen extends StatelessWidget {
                 ),
               ],
             ),
-            Text("Copyright 2021 Jofedo Inc."),
+            Text("Copyright 2021 Josif Inc."),
           ],
         ),
       ),

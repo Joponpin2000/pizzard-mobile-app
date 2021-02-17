@@ -29,20 +29,20 @@ dependencies:
   shared_preferences: ^0.5.6
   provider: ^4.3.2+2
   http: ^0.12.2
-  json_annotation: 
+  json_annotation:
   flutter_launcher_icons: ^0.8.1
   flutter_launcher_name: ^0.0.1
-  # url_launcher: 
-  # flutter_paystack: 
+  url_launcher:
+  flutter_paystack:
   shape_of_view: ^1.0.2
   dynamic_theme: ^1.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  json_model: 
+  json_model:
   build_runner: ^1.0.0
-  # build_runner_core: ^3.0.0
+  build_runner_core: ^3.0.0
   json_serializable: ^2.0.0
 
 flutter_icons:

@@ -37,7 +37,7 @@ class SearchTile extends StatelessWidget {
             borderRadius: BorderRadius.circular(50),
             child: Image(
               image: NetworkImage(
-                "$SERVER_IP/$productImage",
+                "$SERVER_IP/$productName.jpg",
               ),
               fit: BoxFit.cover,
             ),

@@ -1,6 +1,5 @@
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:pizzard/authenticate/authenticate.dart';
 import 'package:pizzard/models/cart.dart';
 import 'package:pizzard/models/orders.dart';
 import 'package:pizzard/screens/Cart.dart';

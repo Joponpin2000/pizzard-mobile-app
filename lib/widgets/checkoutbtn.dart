@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pizzard/authenticate/authenticate.dart';
 import 'package:pizzard/authenticate/check.dart';
 import 'package:pizzard/models/cart.dart';
 import 'package:pizzard/screens/Shipping.dart';
+import 'package:pizzard/shared/helper_functions.dart';
 
 class CheckOutButton extends StatefulWidget {
   final Cart cart;
@@ -21,7 +23,7 @@ class _CheckOutButtonState extends State<CheckOutButton> {
         child: FlatButton(
             color: Theme.of(context).primaryColor,
             child: Text(
-              'Checkout',
+              'Place Order',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
@@ -30,13 +32,20 @@ class _CheckOutButtonState extends State<CheckOutButton> {
             onPressed: widget.cart.totalAmount <= 0
                 ? null
                 : () async {
-                    Future userIsLoggedIn = check();
-                    if (userIsLoggedIn != null) {
+                    final token = await getJwtToken();
+                    if (token != null) {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
+                          builder: (context) => ShippingScreen(),
+                        ),
+                      );
+                    } else {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
                           builder: (context) =>
-                              ShippingScreen(cart: widget.cart),
+                              Authenticate(redirectToOrder: true),
                         ),
                       );
                     }

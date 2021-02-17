@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pizzard/services/auth.dart';
-import 'package:shape_of_view/shape_of_view.dart';
 
 class SignUpScreen extends StatefulWidget {
   final Function toggleView;

@@ -46,7 +46,7 @@ class _FoodTileState extends State<FoodTile> {
                       tag: widget.productImage,
                       child: Image(
                         image: NetworkImage(
-                          "$SERVER_IP/${widget.productImage}",
+                          "$SERVER_IP/${widget.productName}.jpg",
                         ),
                         fit: BoxFit.cover,
                       ),
@@ -114,7 +114,7 @@ class _FoodTileState extends State<FoodTile> {
                     borderRadius: BorderRadius.circular(10),
                     child: Image(
                       image: NetworkImage(
-                        "$SERVER_IP/${widget.productImage}",
+                        "$SERVER_IP/${widget.productName}.jpg",
                       ),
                       fit: BoxFit.cover,
                     ),

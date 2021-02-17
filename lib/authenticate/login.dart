@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pizzard/main.dart';
-import 'package:pizzard/screens/PlaceOrder.dart';
+import 'package:pizzard/screens/Shipping.dart';
 import 'package:pizzard/services/auth.dart';
 import 'package:pizzard/shared/helper_functions.dart';
 import 'package:shape_of_view/shape_of_view.dart';
@@ -41,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PlaceOrder(),
+                  builder: (context) => ShippingScreen(),
                 ),
               );
             } else {

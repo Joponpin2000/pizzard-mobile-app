@@ -2,7 +2,7 @@ import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:pizzard/main.dart';
 import 'package:pizzard/screens/AppInfo.dart';
-import 'package:pizzard/screens/PlaceOrder.dart';
+import 'package:pizzard/screens/Orders.dart';
 import 'package:pizzard/shared/helper_functions.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -83,7 +83,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PlaceOrder(),
+                builder: (context) => OrdersScreen(),
                   ),
                 );
               },

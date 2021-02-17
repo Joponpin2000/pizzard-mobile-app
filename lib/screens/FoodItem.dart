@@ -59,7 +59,7 @@ class _FoodItemScreenState extends State<FoodItemScreen> {
                               width: double.infinity,
                               fit: BoxFit.cover,
                               image: NetworkImage(
-                                "$SERVER_IP/${food['productImage']}",
+                                "$SERVER_IP/${food['productName']}.jpg",
                               ),
                             ),
                           )),

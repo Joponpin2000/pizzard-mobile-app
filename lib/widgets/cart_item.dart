@@ -56,7 +56,7 @@ class _CartPdtState extends State<CartPdt> {
               borderRadius: BorderRadius.circular(50),
               child: Image(
                 image: NetworkImage(
-                  "$SERVER_IP/${widget.image}",
+                  "$SERVER_IP/${widget.name}.jpg",
                 ),
                 fit: BoxFit.cover,
               ),
