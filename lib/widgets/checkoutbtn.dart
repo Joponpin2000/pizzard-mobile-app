@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pizzard/authenticate/authenticate.dart';
-import 'package:pizzard/authenticate/check.dart';
 import 'package:pizzard/models/cart.dart';
 import 'package:pizzard/screens/Shipping.dart';
 import 'package:pizzard/shared/helper_functions.dart';

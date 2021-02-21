@@ -23,10 +23,11 @@ class _ShippingScreenState extends State<ShippingScreen> {
   Orders instanceOfOrder;
   CheckoutMethod _method;
   bool _inProgress = false;
-  String _cardNumber;
-  String _cvv;
-  int _expiryMonth = 0;
-  int _expiryYear = 0;
+  bool useTestCard? = true;
+  String _cardNumber = '507850785078507812';
+  String _cvv = '081';
+  int _expiryMonth = 12;
+  int _expiryYear = 80;
   int amount;
   String email;
   String name;
@@ -106,7 +107,7 @@ class _ShippingScreenState extends State<ShippingScreen> {
         _verifyOnServer(response.reference);
       } catch (e) {
         setState(() => _inProgress = false);
-        _showMessage("Check console for error");
+        _showMessage("Error occured. Try again.");
         rethrow;
       }
     }
@@ -117,18 +118,21 @@ class _ShippingScreenState extends State<ShippingScreen> {
     String url = '$SERVER_IP/api/paystack/callback?ref=$reference';
     try {
       http.Response response = await http.get(url);
-      _updateStatus(reference,
-          PaymentResponse.fromJson(jsonDecode(response.body)).successMessage);
-
-      instanceOfOrder.addOrder(
-          instanceOfCart.items.values.toList(), instanceOfCart.totalAmount);
-      instanceOfCart.clear();
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => OrdersScreen(),
-        ),
-      );
+      if (response.statusCode == 200) {
+        if ( _updateStatus(reference,
+            PaymentResponse.fromJson(jsonDecode(response.body)).successMessage)) {
+            if(instanceOfOrder.addOrder(
+            instanceOfCart.items.values.toList(), instanceOfCart.totalAmount);
+        instanceOfCart.clear()) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OrdersScreen(),
+          ),
+        );
+            }
+        }
+      }
     } catch (e) {
       _updateStatus(
           reference,
@@ -144,9 +148,13 @@ class _ShippingScreenState extends State<ShippingScreen> {
   }
 
   _showMessage(String message,
-      [Duration duration = const Duration(seconds: 4)]) {
+      [Duration duration = const Duration(seconds: 3)]) {
     _scaffoldKey.currentState.showSnackBar(new SnackBar(
-      content: new Text(message),
+      content: new Text(
+        message,
+        style: TextStyle(color: Colors.white),
+      ),
+      backgroundColor: Colors.black,
       duration: duration,
       action: new SnackBarAction(
           label: 'CLOSE',
@@ -167,12 +175,20 @@ class _ShippingScreenState extends State<ShippingScreen> {
 
   PaymentCard _getCardFromUI() {
     // Using just the must-required parameters.
+    if (useTestCard?) {
     return PaymentCard(
-      number: _cardNumber,
-      cvc: _cvv,
-      expiryMonth: _expiryMonth,
-      expiryYear: _expiryYear,
+      number: '507850785078507812',
+      cvc: "081",
+      expiryMonth: 12,
+      expiryYear: 80,
     );
+    } else {
+    return PaymentCard(
+      number: '507850785078507812',
+      cvc: "081",
+      expiryMonth: 12,
+      expiryYear: 80,
+    }
 
     // Using Cascade notation (similar to Java's builder pattern)
 //    return PaymentCard(
@@ -208,148 +224,132 @@ class _ShippingScreenState extends State<ShippingScreen> {
 
     return Scaffold(
       key: _scaffoldKey,
+      appBar: AppBar(
+        title: Text("Place Order"),
+      ),
       body: isLoading
           ? Container(
               child: Center(
                 child: CircularProgressIndicator(),
               ),
             )
-          : SafeArea(
-              top: true,
-              child: Container(
-                alignment: Alignment.center,
-                child: ListView(
-                  padding: EdgeInsets.all(25),
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.all(3),
-                      alignment: Alignment.center,
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          children: <Widget>[
-                            Text(
-                              'Shipping',
-                              style: TextStyle(
-                                fontSize: 40,
-                                fontWeight: FontWeight.w600,
-                              ),
+          : Container(
+              alignment: Alignment.center,
+              child: ListView(
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            child: Text(
+                              error,
+                              style: TextStyle(color: Colors.red),
                             ),
-                            SizedBox(height: 10),
-                            Container(
-                              padding: EdgeInsets.all(8),
-                              child: Text(
-                                error,
-                                style: TextStyle(color: Colors.red),
-                              ),
+                          ),
+                          TextFormField(
+                            decoration: InputDecoration(
+                              labelText: 'Address',
+                              icon: Icon(Icons.location_on),
                             ),
-                            TextFormField(
-                              decoration: InputDecoration(
-                                labelText: 'Address',
-                                icon: Icon(Icons.location_on),
-                              ),
-                              controller: addressController,
-                              validator: (value) => value.isEmpty
-                                  ? "Address Shouldn't be empty"
-                                  : null,
+                            controller: addressController,
+                            validator: (value) => value.isEmpty
+                                ? "Address Shouldn't be empty"
+                                : null,
+                          ),
+                          TextFormField(
+                            decoration: InputDecoration(
+                              labelText: 'City',
+                              icon: Icon(Icons.location_city_rounded),
                             ),
-                            TextFormField(
-                              decoration: InputDecoration(
-                                labelText: 'City',
-                                icon: Icon(Icons.location_city_rounded),
-                              ),
-                              controller: cityController,
-                              validator: (value) => value.isEmpty
-                                  ? "City Shouldn't be empty"
-                                  : null,
+                            controller: cityController,
+                            validator: (value) => value.isEmpty
+                                ? "City Shouldn't be empty"
+                                : null,
+                          ),
+                          TextFormField(
+                            decoration: InputDecoration(
+                              labelText: 'Country',
+                              icon: Icon(Icons.not_listed_location_outlined),
                             ),
-                            TextFormField(
-                              decoration: InputDecoration(
-                                labelText: 'Country',
-                                icon: Icon(Icons.not_listed_location_outlined),
-                              ),
-                              controller: countryController,
-                              validator: (value) => value.isEmpty
-                                  ? "Country Shouldn't be empty"
-                                  : null,
-                            ),
-                            SizedBox(height: 20),
-                            _inProgress
-                                ? new Container(
-                                    alignment: Alignment.center,
-                                    height: 50.0,
-                                    child: Platform.isIOS
-                                        ? new CupertinoActivityIndicator()
-                                        : new CircularProgressIndicator(),
-                                  )
-                                : new Column(
-                                    children: <Widget>[
-                                      new DropdownButtonHideUnderline(
-                                        child: new InputDecorator(
-                                          decoration: const InputDecoration(
-                                            border: OutlineInputBorder(),
-                                            isDense: true,
-                                            hintText: 'Checkout method',
-                                          ),
-                                          isEmpty: _method == null,
-                                          child: new DropdownButton<
-                                              CheckoutMethod>(
-                                            value: _method,
-                                            isDense: true,
-                                            onChanged: (CheckoutMethod value) {
-                                              setState(() {
-                                                _method = value;
-                                              });
-                                            },
-                                            items: banks.map((String value) {
-                                              return new DropdownMenuItem<
-                                                  CheckoutMethod>(
-                                                value:
-                                                    _parseStringToMethod(value),
-                                                child: new Text(value),
-                                              );
-                                            }).toList(),
-                                          ),
+                            controller: countryController,
+                            validator: (value) => value.isEmpty
+                                ? "Country Shouldn't be empty"
+                                : null,
+                          ),
+                          SizedBox(height: 20),
+                          _inProgress
+                              ? new Container(
+                                  alignment: Alignment.center,
+                                  height: 50.0,
+                                  child: Platform.isIOS
+                                      ? new CupertinoActivityIndicator()
+                                      : new CircularProgressIndicator(),
+                                )
+                              : new Column(
+                                  children: <Widget>[
+                                    new DropdownButtonHideUnderline(
+                                      child: new InputDecorator(
+                                        decoration: const InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          isDense: true,
+                                          hintText: 'Checkout method',
+                                        ),
+                                        isEmpty: _method == null,
+                                        child:
+                                            new DropdownButton<CheckoutMethod>(
+                                          value: _method,
+                                          isDense: true,
+                                          onChanged: (CheckoutMethod value) {
+                                            setState(() {
+                                              _method = value;
+                                            });
+                                          },
+                                          items: banks.map((String value) {
+                                            return new DropdownMenuItem<
+                                                CheckoutMethod>(
+                                              value:
+                                                  _parseStringToMethod(value),
+                                              child: new Text(value),
+                                            );
+                                          }).toList(),
                                         ),
                                       ),
-                                      SizedBox(height: 30),
-                                      new Container(
-                                        width: double.infinity,
-                                        child: _getPlatformButton(
-                                          'Checkout',
-                                          () => _handleCheckout(context),
-                                        ),
+                                    ),
+                                    SizedBox(height: 30),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        useTestCard? = !useTestCard?;
+                                      },
+                                      child: Row(
+                                        children: [
+                                          TickBox(
+                                            value: usTestCard?,
+                                          ),
+                                          Text("Use a test card",
+                                           style: TextStyle(
+                                             color: Colors.red),
+                                             ),
+                                             ],
+                                             ),
+                                    ),
+                                    new Container(
+                                      width: double.infinity,
+                                      child: _getPlatformButton(
+                                        'Checkout',
+                                        () => _handleCheckout(context),
                                       ),
-                                    ],
-                                  ),
-                            // GestureDetector(
-                            //   onTap: () async {
-                            //     if (_formKey.currentState.validate()) {
-                            //       setState(() {
-                            //         isLoading = true;
-                            //       });
-                            //       placeOrder(cart, orderInstance);
-                            //     }
-                            //   },
-                            //   child: Container(
-                            //     alignment: Alignment.center,
-                            //     padding: EdgeInsets.symmetric(
-                            //       vertical: 15,
-                            //       horizontal: 10,
-                            //     ),
-                            //     color: Theme.of(context).primaryColor,
-                            //     child: Text(
-                            //       'Checkout',
-                            //       style: TextStyle(color: Colors.white),
-                            //     ),
-                            //   ),
-                            // ),
-                          ],
-                        ),
+                                    ),
+                                  ],
+                                ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
     );

@@ -9,6 +9,8 @@ import 'package:pizzard/screens/home.dart';
 import 'package:pizzard/services/foods.dart';
 import 'package:pizzard/shared/helper_functions.dart';
 import 'package:provider/provider.dart';
+import 'dart:io';
+import 'package:fluttertoast/fluttertoast.dart';
 
 void main() {
   runApp(MyApp());
@@ -104,6 +106,36 @@ class _MainScreenState extends State<MainScreen> {
     new CartScreen(),
     new SettingsScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    checkConnectivity();
+  }
+
+  checkConnectivity() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        showToast('Connected', Colors.greenAccent);
+      }
+    } on SocketException catch (_) {
+      showToast('Not connected', Colors.orangeAccent);
+    }
+  }
+
+  void showToast(message, color) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: color,
+      textColor: Colors.white,
+      fontSize: 16,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context);
@@ -133,6 +165,8 @@ class _MainScreenState extends State<MainScreen> {
             backgroundColor: Theme.of(context).primaryColor,
           ),
           BottomNavigationBarItem(
+            label: "Cart",
+            backgroundColor: Theme.of(context).primaryColor,
             icon: Stack(
               children: [
                 cart.itemCount > 0
@@ -143,18 +177,19 @@ class _MainScreenState extends State<MainScreen> {
                           height: 10,
                           width: 10,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            color: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.red,
                           ),
                         ),
                       )
                     : SizedBox(),
-                Icon(Icons.shopping_cart_outlined,
-                    size: 18, color: Colors.grey),
+                Icon(
+                  Icons.shopping_cart_outlined,
+                  size: 20,
+                  color: Colors.black,
+                ),
               ],
             ),
-            label: "Cart",
-            backgroundColor: Theme.of(context).primaryColor,
           ),
           BottomNavigationBarItem(
             icon: Icon(

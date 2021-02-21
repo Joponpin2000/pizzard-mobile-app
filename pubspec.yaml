@@ -36,6 +36,7 @@ dependencies:
   flutter_paystack:
   shape_of_view: ^1.0.2
   dynamic_theme: ^1.0.1
+  fluttertoast: ^7.1.6
 
 dev_dependencies:
   flutter_test:

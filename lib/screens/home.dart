@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pizzard/models/cart.dart';
+import 'package:pizzard/screens/Cart.dart';
+import 'package:pizzard/screens/Profile.dart';
 import 'package:pizzard/services/foods.dart';
 import 'package:pizzard/widgets/food_list.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cart = Provider.of<Cart>(context);
     final productData = Provider.of<Foods>(context);
     productData.getFoodsFromServer().then((value) => getFoods(value));
 
@@ -41,20 +45,48 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      margin: EdgeInsets.only(
-                        top: 20,
-                        bottom: 5,
-                        left: 15,
-                        right: 15,
-                      ),
-                      child: Text(
-                        "What would you like",
-                        style: TextStyle(
-                          // fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(
+                            top: 20,
+                            bottom: 5,
+                            left: 15,
+                          ),
+                          child: Text(
+                            "What would you like",
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
                         ),
-                      ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Profile(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(
+                              top: 20,
+                              bottom: 5,
+                              right: 15,
+                            ),
+                            child: CircleAvatar(
+                              backgroundColor: Theme.of(context).accentColor,
+                              child: Icon(
+                                Icons.account_circle_rounded,
+                                size: 30,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     Container(
                       margin: EdgeInsets.symmetric(
