@@ -1,9 +1,8 @@
 import 'dart:convert';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
-// const SERVER_IP = 'http://pizzard.herokuapp.com';
-const SERVER_IP = 'http://192.168.43.201:4000';
+const SERVER_IP = 'http://pizzard.herokuapp.com';
+// const SERVER_IP = 'http://192.168.43.201:4000';
 const PUBLIC_KEY = 'pk_test_b5c70113d9924c7dc4fd61a362c51fe24c5c3181';
 
 const String appName = 'Pizzards';
@@ -59,6 +58,8 @@ class HelperFunctions {
   static String sharedPreferenceUserEmailKey = "USEREMAILKEY";
   static String sharedPreferenceJwtKey = "jwt";
   static String sharedPreferenceDarkThemeKey = "DARKTHEME";
+  static String sharedPreferenceOrdersKey = 'Orders';
+  static List _orders = [];
 
   static Future<bool> saveJwtSharedPreference(String jwt) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -78,6 +79,12 @@ class HelperFunctions {
   static Future<bool> saveDarkThemeSharedPreference(bool jwt) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return await prefs.setBool(sharedPreferenceDarkThemeKey, jwt);
+  }
+
+  static Future<bool> saveOrdersSharedPreference(String reference) async {
+    _orders.add(DateTime.now().toString());
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return await prefs.setStringList(sharedPreferenceOrdersKey, _orders);
   }
 
   static Future<String> getJwtSharedPreference() async {

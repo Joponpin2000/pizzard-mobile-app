@@ -40,7 +40,7 @@ class _CheckOutButtonState extends State<CheckOutButton> {
                         ),
                       );
                     } else {
-                      Navigator.pushReplacement(
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) =>

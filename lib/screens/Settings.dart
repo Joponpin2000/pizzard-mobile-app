@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:pizzard/authenticate/authenticate.dart';
 import 'package:pizzard/main.dart';
 import 'package:pizzard/screens/AppInfo.dart';
-import 'package:pizzard/screens/Orders.dart';
 import 'package:pizzard/shared/helper_functions.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -79,30 +78,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   : Colors.white,
               height: 0.1,
             ),
-            _logout
-                ? GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => OrdersScreen(),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      child: ListTile(
-                        leading: Icon(
-                          Icons.home_outlined,
-                          color:
-                              Theme.of(context).brightness == Brightness.light
-                                  ? Theme.of(context).primaryColor
-                                  : Theme.of(context).accentColor,
-                        ),
-                        title: Text('Orders'),
-                      ),
-                    ),
-                  )
-                : Container(),
+            // _logout
+            //     ? GestureDetector(
+            //         onTap: () {
+            //           Navigator.push(
+            //             context,
+            //             MaterialPageRoute(
+            //               builder: (context) => OrdersScreen(),
+            //             ),
+            //           );
+            //         },
+            //         child: Container(
+            //           child: ListTile(
+            //             leading: Icon(
+            //               Icons.home_outlined,
+            //               color:
+            //                   Theme.of(context).brightness == Brightness.light
+            //                       ? Theme.of(context).primaryColor
+            //                       : Theme.of(context).accentColor,
+            //             ),
+            //             title: Text('Orders'),
+            //           ),
+            //         ),
+            //       )
+            //     : Container(),
             Container(
               color: Theme.of(context).brightness == Brightness.light
                   ? Colors.black
@@ -152,7 +151,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   ? Theme.of(context).primaryColor
                                   : Theme.of(context).accentColor,
                         ),
-                        title: Text('Logout', style: TextStyle(color: Colors.red),),
+                        title: Text(
+                          'Logout',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   )
@@ -164,7 +166,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => Authenticate(),
-                         ),
+                        ),
                       );
                     },
                     child: Container(
@@ -176,7 +178,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   ? Theme.of(context).primaryColor
                                   : Theme.of(context).accentColor,
                         ),
-                        title: Text('Login', style: TextStyle(color: Colors.blue),),
+                        title: Text(
+                          'Login',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   )

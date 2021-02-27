@@ -10,6 +10,7 @@ class OrderPdt extends StatefulWidget {
   final String image;
   final int productQty;
   final bool cartPage;
+  final DateTime dateTime;
 
   OrderPdt({
     this.id,
@@ -19,7 +20,7 @@ class OrderPdt extends StatefulWidget {
     this.name,
     this.image,
     @required this.productQty,
-    this.cartPage,
+    this.cartPage, this.dateTime,
   });
   @override
   _OrderPdtState createState() => _OrderPdtState();
@@ -63,9 +64,14 @@ class _OrderPdtState extends State<OrderPdt> {
         title: Text(
           widget.name,
         ),
-        subtitle: Text("$quantity x"),
-        trailing: Text(
-          'Total: \$${widget.price * quantity}',
+        subtitle: Text("${widget.dateTime}"),
+        trailing: Column(
+          children: [
+            Text("$quantity x"),
+            Text(
+              'Total: \$${widget.price * quantity}',
+            ),
+          ],
         ),
       ),
     );

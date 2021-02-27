@@ -17,9 +17,6 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Cart"),
-      ),
       body: cart.items.length != 0
           ? SafeArea(
               child: Column(

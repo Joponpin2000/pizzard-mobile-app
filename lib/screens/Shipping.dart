@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:pizzard/models/cart.dart';
 import 'package:pizzard/models/orders.dart';
-import 'package:pizzard/screens/Orders.dart';
 import 'package:pizzard/shared/helper_functions.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,11 +22,11 @@ class _ShippingScreenState extends State<ShippingScreen> {
   Orders instanceOfOrder;
   CheckoutMethod _method;
   bool _inProgress = false;
-  bool useTestCard? = true;
-  String _cardNumber = '507850785078507812';
-  String _cvv = '081';
-  int _expiryMonth = 12;
-  int _expiryYear = 80;
+  bool _useTestCard = true;
+  String _cardNumber = '';
+  String _cvv = '';
+  int _expiryMonth;
+  int _expiryYear;
   int amount;
   String email;
   String name;
@@ -119,19 +118,22 @@ class _ShippingScreenState extends State<ShippingScreen> {
     try {
       http.Response response = await http.get(url);
       if (response.statusCode == 200) {
-        if ( _updateStatus(reference,
-            PaymentResponse.fromJson(jsonDecode(response.body)).successMessage)) {
-            if(instanceOfOrder.addOrder(
-            instanceOfCart.items.values.toList(), instanceOfCart.totalAmount);
-        instanceOfCart.clear()) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => OrdersScreen(),
-          ),
-        );
-            }
-        }
+        instanceOfOrder.addOrder(instanceOfCart.items.values.toList(),
+            instanceOfCart.totalAmount, reference);
+        instanceOfCart.clear();
+        _updateStatus(reference,
+            PaymentResponse.fromJson(jsonDecode(response.body)).successMessage);
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) =>
+        //     MainScreen(),
+        //     // OrdersScreen(
+        //     //     reference: reference,
+        //     //     snackbarMsg: PaymentResponse.fromJson(jsonDecode(response.body))
+        //     //         .successMessage),
+        //   ),
+        // );
       }
     } catch (e) {
       _updateStatus(
@@ -143,8 +145,8 @@ class _ShippingScreenState extends State<ShippingScreen> {
   }
 
   _updateStatus(String reference, String message) {
-    _showMessage('Response: $message\nReference: $reference ',
-        const Duration(seconds: 7));
+    _showMessage(
+        '$message\nReference: $reference ', const Duration(seconds: 7));
   }
 
   _showMessage(String message,
@@ -175,41 +177,26 @@ class _ShippingScreenState extends State<ShippingScreen> {
 
   PaymentCard _getCardFromUI() {
     // Using just the must-required parameters.
-    if (useTestCard?) {
-    return PaymentCard(
-      number: '507850785078507812',
-      cvc: "081",
-      expiryMonth: 12,
-      expiryYear: 80,
-    );
+    if (_useTestCard) {
+      return PaymentCard(
+          number: '507850785078507812',
+          cvc: "081",
+          expiryMonth: 12,
+          expiryYear: 80,
+          name: name,
+          addressCountry: countryController.text,
+          addressLine1: addressController.text);
     } else {
-    return PaymentCard(
-      number: '507850785078507812',
-      cvc: "081",
-      expiryMonth: 12,
-      expiryYear: 80,
+      return PaymentCard(
+        number: _cardNumber,
+        cvc: _cvv,
+        expiryMonth: _expiryMonth,
+        expiryYear: _expiryYear,
+        name: name,
+        addressCountry: countryController.text,
+        addressLine1: addressController.text,
+      );
     }
-
-    // Using Cascade notation (similar to Java's builder pattern)
-//    return PaymentCard(
-//        number: cardNumber,
-//        cvc: cvv,
-//        expiryMonth: expiryMonth,
-//        expiryYear: expiryYear)
-//      ..name = 'Segun Chukwuma Adamu'
-//      ..country = 'Nigeria'
-//      ..addressLine1 = 'Ikeja, Lagos'
-//      ..addressPostalCode = '100001';
-
-    // Using optional parameters
-//    return PaymentCard(
-//        number: cardNumber,
-//        cvc: cvv,
-//        expiryMonth: expiryMonth,
-//        expiryYear: expiryYear,
-//        name: 'Ismail Adebola Emeka',
-//        addressCountry: 'Nigeria',
-//        addressLine1: '90, Nnebisi Road, Asaba, Deleta State');
   }
 
   @override
@@ -322,19 +309,27 @@ class _ShippingScreenState extends State<ShippingScreen> {
                                     SizedBox(height: 30),
                                     GestureDetector(
                                       onTap: () async {
-                                        useTestCard? = !useTestCard?;
+                                        _useTestCard = !_useTestCard;
                                       },
-                                      child: Row(
-                                        children: [
-                                          TickBox(
-                                            value: usTestCard?,
-                                          ),
-                                          Text("Use a test card",
-                                           style: TextStyle(
-                                             color: Colors.red),
-                                             ),
-                                             ],
-                                             ),
+                                      child: CheckboxListTile(
+                                        title: Text(
+                                          "Use a test card?",
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColor),
+                                        ),
+                                        subtitle: _useTestCard
+                                            ? Text("Pin: 1111")
+                                            : Container(),
+                                        contentPadding:
+                                            EdgeInsets.fromLTRB(2, 2, 120, 2),
+                                        value: _useTestCard,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _useTestCard = value;
+                                          });
+                                        },
+                                      ),
                                     ),
                                     new Container(
                                       width: double.infinity,

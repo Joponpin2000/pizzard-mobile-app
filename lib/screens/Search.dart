@@ -12,7 +12,7 @@ class _SearchScreenState extends State<SearchScreen> {
   String query = '';
 
   List<dynamic> foods;
-  bool _loading = false;
+  bool _loading = true;
 
   getFoods(items) {
     if (this.mounted) {
@@ -52,41 +52,40 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       body: SafeArea(
         top: true,
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 5,
-                ),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.blueGrey[100],
-                  ),
-                ),
-                child: TextField(
-                  onChanged: (value) {
-                    setState(() {
-                      _loading = true;
-                      query = value;
-                    });
-                  },
-                  decoration: InputDecoration(
-                    hintText: 'Search..',
-                    border: InputBorder.none,
-                  ),
+        child: Column(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: 24,
+                vertical: 5,
+              ),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.blueGrey[100],
                 ),
               ),
-              _loading
-                  ? Center(
-                      child: Container(
-                        child: CircularProgressIndicator(),
-                      ),
-                    )
-                  : Expanded(child: searchList()),
-            ],
-          ),
+              child: TextField(
+                onChanged: (value) {
+                  setState(() {
+                    _loading = true;
+                    query = value;
+                  });
+                },
+                decoration: InputDecoration(
+                  hintText: 'Search..',
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+            _loading
+                ?
+                 Center(
+                    child: Container(
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+                : Expanded(child: searchList()),
+          ],
         ),
       ),
     );

@@ -117,10 +117,10 @@ class _MainScreenState extends State<MainScreen> {
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        showToast('Connected', Colors.greenAccent);
+        // showToast('Connected', Colors.greenAccent);
       }
     } on SocketException catch (_) {
-      showToast('Not connected', Colors.orangeAccent);
+      showToast('Please check your internet connection', Colors.orangeAccent);
     }
   }
 
@@ -177,8 +177,8 @@ class _MainScreenState extends State<MainScreen> {
                           height: 10,
                           width: 10,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(30),
+                            color: Theme.of(context).primaryColor,
                           ),
                         ),
                       )

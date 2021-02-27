@@ -26,8 +26,8 @@ class _ProfileState extends State<Profile> {
           email = value;
         });
       } else {
-        showToast("Login to view profile");
-        Navigator.push(
+        showToast("Login to view profile", Colors.orangeAccent);
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => MainScreen(),
@@ -41,7 +41,7 @@ class _ProfileState extends State<Profile> {
           name = value;
         });
       } else {
-        showToast("Login to view profile");
+        showToast("Login to view profile", Colors.orangeAccent);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -57,14 +57,14 @@ class _ProfileState extends State<Profile> {
     }
   }
 
-  void showToast(message) {
+  void showToast(message, color) {
     Fluttertoast.showToast(
       msg: message,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 1,
-      backgroundColor: Colors.transparent,
-      textColor: Colors.red,
+      backgroundColor: color,
+      textColor: Colors.white,
       fontSize: 16,
     );
   }
@@ -72,6 +72,9 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Profile"),
+      ),
       body: SafeArea(
         child: _loading
             ? Center(

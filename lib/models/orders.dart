@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import 'package:pizzard/models/cart.dart';
+import 'package:pizzard/shared/helper_functions.dart';
 
 class OrderItem {
   final String id;
@@ -23,53 +24,10 @@ class Orders with ChangeNotifier {
     return [..._orders];
   }
 
-   addOrder(List<CartItem> cartProducts, double total) async {
+  addOrder(List<CartItem> cartProducts, double total, String reference) async {
+    HelperFunctions.saveOrdersSharedPreference(reference);
     _orders = cartProducts;
     notifyListeners();
     return orders;
-
-
-
-
-    // final token = await getJwtToken();
-    // final email = await HelperFunctions.getUserEmailSharedPreference();
-    // final name = await HelperFunctions.getUserNameSharedPreference();
-    // final url = "$SERVER_IP/api/paystack/pay";
-    // try {
-    //   final response = await http.post(
-    //     url,
-    //     headers: {"authorization": "Bearer $token"},
-    //     body: {
-    //       'id': DateTime.now().toString(),
-
-    //       'amount': (total * 100)
-    //           .toString(), // multiply amount by 100 as paystack charges in kobo
-    //       "email": email,
-    //       "name": name,
-    //     },
-    //   );
-
-    //   if (response.statusCode == 200) {
-    //     try {
-    //       final http.Response pay =
-    //           await http.get(jsonDecode(response.body)["url"]);
-    //       print(pay.body);
-    //     } catch (err) {
-    //       throw err;
-    //     }
-
-    //     // _orders.insert(
-    //     //     0,
-    //     //     OrderItem(
-    //     //       id: jsonDecode(response.body)['name'],
-    //     //       amount: total,
-    //     //       dateTime: timeStamp,
-    //     //       products: cartProducts,
-    //     //     ));
-    //   }
-    //   notifyListeners();
-    // } catch (err) {
-    //   throw err;
-    // }
   }
 }

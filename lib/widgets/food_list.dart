@@ -9,6 +9,7 @@ class FoodList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      padding: EdgeInsets.only(bottom: 250),
       shrinkWrap: true,
       scrollDirection: Axis.vertical,
       itemCount: foods.length,
@@ -17,7 +18,6 @@ class FoodList extends StatelessWidget {
           height: MediaQuery.of(context).size.height / 2,
           margin: EdgeInsets.symmetric(vertical: 5),
           child: FoodTile(
-      
             id: foods[index]['_id'],
             productCategory: foods[index]['productCategory'],
             productName: foods[index]['productName'],

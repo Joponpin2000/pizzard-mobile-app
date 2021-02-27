@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pizzard/models/cart.dart';
-import 'package:pizzard/screens/Cart.dart';
 import 'package:pizzard/screens/Profile.dart';
 import 'package:pizzard/services/foods.dart';
+import 'package:pizzard/shared/helper_functions.dart';
 import 'package:pizzard/widgets/food_list.dart';
 import 'package:provider/provider.dart';
 
@@ -12,8 +11,25 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String email;
   List<dynamic> foods;
   bool _loading = true;
+
+  @override
+  void initState() {
+    initializeStateValues();
+    super.initState();
+  }
+
+  initializeStateValues() async {
+    await HelperFunctions.getUserEmailSharedPreference().then((value) {
+      if (value != null) {
+        setState(() {
+          email = value;
+        });
+      }
+    });
+  }
 
   getFoods(items) {
     if (this.mounted) {
@@ -28,7 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final cart = Provider.of<Cart>(context);
     final productData = Provider.of<Foods>(context);
     productData.getFoodsFromServer().then((value) => getFoods(value));
 
@@ -61,31 +76,33 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Profile(),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            margin: EdgeInsets.only(
-                              top: 20,
-                              bottom: 5,
-                              right: 15,
-                            ),
-                            child: CircleAvatar(
-                              backgroundColor: Theme.of(context).accentColor,
-                              child: Icon(
-                                Icons.account_circle_rounded,
-                                size: 30,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                        ),
+                        email != null
+                            ? GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Profile(),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.only(
+                                    top: 20,
+                                    bottom: 5,
+                                    right: 15,
+                                  ),
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.transparent,
+                                    child: Icon(
+                                      Icons.account_circle_rounded,
+                                      size: 40,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : SizedBox(),
                       ],
                     ),
                     Container(
@@ -112,6 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         foods: foods,
                       ),
                     ),
+                    SizedBox(height: 30),
                   ],
                 ),
               ),
